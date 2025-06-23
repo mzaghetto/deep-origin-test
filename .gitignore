@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.next/
+/.env
+/.env.local
+**/node_modules/
+**/dist/
+**/build/
+npm-debug.log
+*.log
+*.sqlite
+/.idea/
+.aider*
