@@ -34,7 +34,7 @@ frontend:
 
 test-backend:
 	@echo "Running backend tests..."
-	cd backend && docker-compose run backend npm test
+	cd backend && docker-compose run -e NODE_ENV=test backend npm test
 
 open:
 	@echo "Opening frontend in browser..."
