@@ -54,8 +54,7 @@ export default function ShortenerForm({ onShorten }: ShortenerFormProps) {
       onShorten(res.data.shortUrl);
       setDomain('');
       setSlug('');
-      setSuccessMsg('URL encurtada criada com sucesso!');
-      setErrorMsg(null);
+      setSuccessMsg('Short URL created successfully!');      setErrorMsg(null);
     } catch (error: any) {
       if (error.response?.status === 409) {
         setErrorMsg(error.response?.data?.message || 'This slug is already in use');

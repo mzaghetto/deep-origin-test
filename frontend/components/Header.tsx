@@ -109,7 +109,7 @@ export default function Header({ onLogin, onLogout }: HeaderProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <button onClick={handleRegister}>Criar</button>
+                <button onClick={handleRegister}>Create</button>
                 <button onClick={() => setIsLogin(true)}>Back to login</button>
               </div>
             )}

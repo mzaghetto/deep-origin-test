@@ -30,7 +30,8 @@ services:
       JWT_SECRET: "secret-here"
       PORT: "40001"
       NODE_ENV: "development"
-      FRONTEND_URL_NOT_FOUND: "http://frontend:30001/404"
+      FRONTEND_URL_NOT_FOUND: "http://127.0.0.1:30001/404"
+      BASE_URL: http://localhost:40001
     depends_on:
       db:
         condition: service_healthy
@@ -50,9 +51,9 @@ services:
     ports:
       - "30001:3000"
     environment:
-      NEXT_PUBLIC_API_URL: "http://backend:40001"
+      NEXT_PUBLIC_API_URL: "http://127.0.0.1:40001"
       NODE_ENV: "development"
-      API_URL: http://backend:40001
+      API_URL: http://127.0.0.1:40001
       PORT: "3000"
     volumes:
       - ./frontend:/app

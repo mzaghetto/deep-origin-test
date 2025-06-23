@@ -2,6 +2,48 @@
 
 A complete URL shortening service built with NestJS (backend) and Next.js (frontend).
 
+## Features
+
+### **Core Requirements**
+✅ **Shorten URLs**: Supports shortening long URLs into shorter, unique slugs.  
+✅ **Redirect to Original URL**: Accessing the shortened URL redirects to the original URL.  
+✅ **404 Handling**: Invalid slugs display a custom 404 page.  
+✅ **Persist URL Records**: Stores shortened URLs in a PostgreSQL database using Prisma ORM.  
+✅ **List All URLs**: Displays a list of all shortened URLs with visit counts.  
+✅ **React & TypeScript**: Frontend built with React and TypeScript.  
+✅ **Node.js & TypeScript**: Backend built with NestJS and TypeScript.  
+
+---
+
+### **Extra Credit**
+✅ **User Authentication**: Supports user accounts with JWT authentication.  
+✅ **URL Validation**: Validates URLs entered in the form and displays error messages for invalid inputs.  
+✅ **Copy to Clipboard**: One-click copy of shortened URLs to the clipboard.  
+✅ **Customizable Slugs**: Allows users to modify the slug of their URLs.  
+✅ **Visit Tracking**: Tracks visits to each shortened URL.  
+✅ **Rate Limiting**: Implements rate limiting to prevent abuse.  
+✅ **Visit Counter**: Displays popularity stats for URLs (visit counts).  
+✅ **Docker Support**: Containerized setup with Docker Compose for easy development and deployment.  
+
+## Tech Stack
+
+### **Frontend**
+- **Framework**: Next.js  
+- **Language**: TypeScript  
+- **Styling**: CSS Modules  
+- **HTTP Client**: Axios  
+
+### **Backend**
+- **Framework**: NestJS  
+- **Language**: TypeScript  
+- **Database**: PostgreSQL  
+- **ORM**: Prisma  
+- **Authentication**: JWT  
+- **Rate Limiting**: NestJS Throttler  
+
+### **Infrastructure**
+- **Containerization**: Docker & Docker Compose  
+
 ## Project Structure
 
 - `/backend`: NestJS API for URL shortening with:
@@ -17,7 +59,7 @@ A complete URL shortening service built with NestJS (backend) and Next.js (front
 ## Requirements
 
 - Node.js >=18
-- PostgreSQL database (or running in Docker Compose)
+- Docker and Docker Compose installed
 
 ## Backend Setup
 
