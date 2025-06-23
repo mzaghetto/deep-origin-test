@@ -1,0 +1,390 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "description": "Does not require authentication. Creates a new user account.",
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Registration credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "user123"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "securePassword123"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered"
+          },
+          "409": {
+            "description": "Username already exists"
+          }
+        },
+        "summary": "Register new user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Does not require authentication. Generates a Bearer token for authenticated requests.",
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "user123"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "securePassword123"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "summary": "User login",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/shorten": {
+      "post": {
+        "description": "Creates a new shortened URL. Can be used without authentication (Bearer optional), but URLs created by authenticated users are linked to their account.",
+        "operationId": "UrlController_shorten",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShortenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "URL successfully shortened",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShortUrlResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid URL or slug contains invalid characters"
+          },
+          "409": {
+            "description": "Custom slug is already in use"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Shorten URL",
+        "tags": [
+          "URLs"
+        ]
+      }
+    },
+    "/urls": {
+      "get": {
+        "description": "Lists shortened URLs. Requires authentication (Bearer token) to list user-specific URLs. Without auth, returns only anonymously created URLs.",
+        "operationId": "UrlController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of shortened URLs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ListUrlsResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List shortened URLs",
+        "tags": [
+          "URLs"
+        ]
+      }
+    },
+    "/{slug}": {
+      "get": {
+        "description": "Redirects to the original URL corresponding to the provided slug. Does not require authentication.",
+        "operationId": "UrlController_redirect",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to original URL"
+          },
+          "404": {
+            "description": "Slug not found"
+          }
+        },
+        "summary": "Redirect to original URL",
+        "tags": [
+          "URLs"
+        ]
+      },
+      "put": {
+        "description": "Updates an existing URL. Requires authentication (Bearer token) and that the URL belongs to the user.",
+        "operationId": "UrlController_update",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUrlDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "URL successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShortUrlResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid URL or slug contains invalid characters"
+          },
+          "403": {
+            "description": "URL does not belong to authenticated user"
+          },
+          "404": {
+            "description": "Slug not found"
+          },
+          "409": {
+            "description": "New slug is already in use"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update shortened URL",
+        "tags": [
+          "URLs"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "URL Shortener API",
+    "description": "URL Shortener API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateShortenDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to be shortened (must start with http:// or https://)"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Custom slug (optional)"
+          }
+        },
+        "required": [
+          "url",
+          "slug"
+        ]
+      },
+      "ShortUrlResponseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Short URL slug",
+            "example": "abc123"
+          },
+          "url": {
+            "type": "string",
+            "description": "Original URL",
+            "example": "https://example.com/long-url"
+          },
+          "shortUrl": {
+            "type": "string",
+            "description": "Complete short URL",
+            "example": "https://shortener.com/abc123"
+          }
+        },
+        "required": [
+          "slug",
+          "url",
+          "shortUrl"
+        ]
+      },
+      "ListUrlsResponseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Short URL slug",
+            "example": "abc123"
+          },
+          "url": {
+            "type": "string",
+            "description": "Original URL",
+            "example": "https://example.com/long-url"
+          },
+          "shortUrl": {
+            "type": "string",
+            "description": "Complete short URL",
+            "example": "https://shortener.com/abc123"
+          },
+          "visits": {
+            "type": "number",
+            "description": "Visit count",
+            "example": 42
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation date",
+            "example": "2023-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "slug",
+          "url",
+          "shortUrl",
+          "visits",
+          "createdAt"
+        ]
+      },
+      "UpdateUrlDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to be updated"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Custom slug (optional)"
+          }
+        },
+        "required": [
+          "url",
+          "slug"
+        ]
+      }
+    }
+  }
+}
