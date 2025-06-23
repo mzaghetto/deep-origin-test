@@ -161,4 +161,4 @@ Example of user editing slug:
 ![Slug Edit](./docs/edit-slug.gif)
 
 Visits counter
-![Visits counter](./docs/visits-badge.gif)
+![Visits counter](./docs/visits-badge.png)
