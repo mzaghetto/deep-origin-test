@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: url_shortener
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '40001:40001'
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/url_shortener
+      BASE_URL: http://localhost:40001
+      PORT: 40001
+      JWT_SECRET: secret-here
+      FRONTEND_URL_NOT_FOUND: http://localhost:30001/404
+    depends_on:
+      - db
